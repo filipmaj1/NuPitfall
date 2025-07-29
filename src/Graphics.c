@@ -48,9 +48,6 @@ void gfx_loadSprite(const char* name)
 #endif
     texture = SDL_CreateTextureFromSurface(sdlInfo.renderer, surface);
 
-    DestroySu
-
-    spriteGlobalList[lastLoadIndex++] = 
 }
 
 void gfx_loadInit()

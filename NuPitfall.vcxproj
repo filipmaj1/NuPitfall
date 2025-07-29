@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Graphics.c" />
-    <ClCompile Include="src\Level.c" />
     <ClCompile Include="src\Level.h" />
     <ClCompile Include="src\Main.c" />
     <ClCompile Include="src\PFAsset.c" />

@@ -7,7 +7,6 @@
     <ClCompile Include="src\SDLStuff.c" />
     <ClCompile Include="src\sys_win.c" />
     <ClCompile Include="src\Level.h" />
-    <ClCompile Include="src\Level.c" />
     <ClCompile Include="src\Sound.c" />
     <ClCompile Include="src\PFCommon.c" />
     <ClCompile Include="src\Graphics.c" />
