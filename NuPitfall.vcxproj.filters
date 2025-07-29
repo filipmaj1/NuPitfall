@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Main.c" />
+    <ClCompile Include="src\PFAsset.c" />
+    <ClCompile Include="src\PFMem.c" />
+    <ClCompile Include="src\SDLStuff.c" />
+    <ClCompile Include="src\sys_win.c" />
+    <ClCompile Include="src\Level.h" />
+    <ClCompile Include="src\Level.c" />
+    <ClCompile Include="src\Sound.c" />
+    <ClCompile Include="src\PFCommon.c" />
+    <ClCompile Include="src\Graphics.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\PFAsset.h" />
+    <ClInclude Include="src\PFCommon.h" />
+    <ClInclude Include="src\PFMem.h" />
+    <ClInclude Include="src\SDLStuff.h" />
+    <ClInclude Include="src\sys_file.h" />
+    <ClInclude Include="src\Sound.h" />
+    <ClInclude Include="src\Graphics.h" />
+  </ItemGroup>
+</Project>
