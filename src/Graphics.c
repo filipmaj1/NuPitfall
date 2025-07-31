@@ -2,34 +2,23 @@
 #include "PFAsset.h"
 #include "SDLStuff.h"
 
+extern SDLInfo sdlInfo;
+
 static pf_font** fontList[GFX_MAX_FONTS];
 static pf_sprite** spriteGlobalList[GFX_MAX_GSPRITES];
 static pf_sprite** spriteLevelList[GFX_MAX_LSPRITES];
 
 static int lastFontIndex = 0;
 static int lastLoadIndex = 0;
+static int levelSpritesStartIndex = 0;
 
-static SDL_Texture* texture;
-static SDL_Surface* surface;
-
-void gfx_drawSprite(int id, int posX, int posY, int frame)
+void gfx_drawSprite(int id, int posX, int posY, int frameNum)
 {
-    pf_sprite* sprite = id <= GFX_MAX_GSPRITES ? spriteGlobalList[id] : spriteLevelList[id];
-    int x = 0, y = 0;
-    for (int i = 0; i < sprite->numFrames; i++)
-    {
-        SDL_Rect dst; dst.x = posX; dst.y = posY; dst.w = sprite->frames[frame].width * 4; dst.h = sprite->frames[frame].height * 4;
-
-        x++;
-        if (x > 10)
-        {
-            x = 0;
-            y++;
-        }
-
-        SDL_RenderCopy(sdlInfo.renderer, texture, 0, &dst);
-        printf("%s\n", SDL_GetError());
-    }
+    pf_sprite* sprite = id < GFX_MAX_GSPRITES ? spriteGlobalList[id] : spriteLevelList[id - GFX_MAX_GSPRITES];
+    pf_sframe frame = sprite->frames[frameNum % sprite->numFrames];
+    
+    SDL_Rect dst; dst.x = posX + frame.offsetX; dst.y = posY + frame.offsetY; dst.w = frame.width; dst.h = frame.height;
+    SDL_RenderCopy(sdlInfo.renderer, frame.texture, 0, &dst);
 }
 
 void gfx_loadFont(const char* name)
@@ -39,15 +28,36 @@ void gfx_loadFont(const char* name)
 
 void gfx_loadSprite(const char* name)
 {
+    SDL_Surface* surface;
     pf_sprite* sprite = ph_nextSprite(name);
 
-#ifdef PF_GFX_USE_ALPHA
-    surface = SDL_CreateRGBSurfaceWithFormatFrom(test->frames[frame].data, test->frames[frame].width, test->frames[frame].height, PF_GFX_BPP * 8, test->frames[frame].width * PF_GFX_BPP, SDL_PIXELFORMAT_RGBA32);
-#else
-    surface = SDL_CreateRGBSurfaceWithFormatFrom(sprite->frames[0].data, sprite->frames[0].width, sprite->frames[0].height, PF_GFX_BPP * 8, sprite->frames[0].width * PF_GFX_BPP, SDL_PIXELFORMAT_RGB24);
-#endif
-    texture = SDL_CreateTextureFromSurface(sdlInfo.renderer, surface);
+    for (int i = 0; i < sprite->numFrames; i++)
+    {
+        if (sprite->frames[i].width == 0 || sprite->frames[i].height == 0)
+            continue;
 
+#ifdef PF_GFX_USE_ALPHA
+        surface = SDL_CreateRGBSurfaceWithFormatFrom(sprite->frames[i].data, sprite->frames[i].width, sprite->frames[i].height, PF_GFX_BPP * 8, sprite->frames[i].width * PF_GFX_BPP, SDL_PIXELFORMAT_RGBA32);
+#else
+        surface = SDL_CreateRGBSurfaceWithFormatFrom(sprite->frames[i].data, sprite->frames[i].width, sprite->frames[i].height, PF_GFX_BPP * 8, sprite->frames[i].width * PF_GFX_BPP, SDL_PIXELFORMAT_RGB24);
+        SDL_SetColorKey(surface, SDL_TRUE, 0);
+#endif
+        sprite->frames[i].texture = SDL_CreateTextureFromSurface(sdlInfo.renderer, surface);
+        SDL_FreeSurface(surface);
+    }
+
+    spriteGlobalList[lastLoadIndex++] = sprite;
+}
+
+void gfx_clearLevelData()
+{
+    for (int i = 0; i < lastLoadIndex - GFX_MAX_GSPRITES; i++)
+    {
+        pf_sprite* sprite = spriteLevelList[i];
+        for (int j = 0; j < sprite->numFrames; j++)
+            SDL_DestroyTexture(sprite->frames[j].texture);
+    }
+    levelSpritesStartIndex = lastLoadIndex;
 }
 
 void gfx_loadInit()
@@ -172,4 +182,6 @@ void gfx_loadInit()
     gfx_loadSprite("hyiwhiph.pc");
     gfx_loadSprite("hyizen.pc");
     gfx_loadSprite("hyizip.pc");
+
+    levelSpritesStartIndex = lastLoadIndex;
 }

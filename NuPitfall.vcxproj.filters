@@ -10,6 +10,7 @@
     <ClCompile Include="src\Sound.c" />
     <ClCompile Include="src\PFCommon.c" />
     <ClCompile Include="src\Graphics.c" />
+    <ClCompile Include="src\Level.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\PFAsset.h" />

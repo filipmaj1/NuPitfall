@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SDLStuff.h"
+
 #define PF_MAX_MEM (10 * 1024 * 1024)
 
 //#define PF_GFX_USE_ALPHA
@@ -27,6 +29,8 @@ typedef struct pf_font {
 }pf_font;
 
 typedef struct pf_sframe {
+	SDL_Texture* texture;
+
 	unsigned int width;
 	unsigned int height;
 	unsigned int offsetX;
@@ -59,6 +63,8 @@ typedef struct pf_bg {
 	unsigned int tilesetHeight;
 
 	unsigned char* tileset;
+
+	SDL_Texture* texture;
 }pf_bg;
 
 typedef struct pf_lvl_data {

@@ -9,5 +9,8 @@ DATA_LOAD_RESULT pf_loadInitData();
 DATA_LOAD_RESULT pf_loadLevelData(int levelNum);
 void pf_releaseLevelData();
 
+void lvl_drawTiles(int offsetX, int offsetY);
+void lvl_drawLevelDataInfo(int posX, int posY, int* printedTest, int mouseX, int mouseY, int mouseDown, int lastOffset);
+
 
 #endif

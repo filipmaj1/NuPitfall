@@ -11,4 +11,4 @@ typedef struct {
 	SDL_Surface* surface;
 } SDLInfo;
 
-static SDLInfo sdlInfo;
+SDLInfo sdlInfo;
